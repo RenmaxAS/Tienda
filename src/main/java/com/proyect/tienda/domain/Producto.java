@@ -50,7 +50,6 @@ public class Producto implements Serializable {
     @Column(name = "Stock")
     private BigDecimal stock;
 
-    @Lob
     @Column(name = "Imagen")
     private String imagen;
 
