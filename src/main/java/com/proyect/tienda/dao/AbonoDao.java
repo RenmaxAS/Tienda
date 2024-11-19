@@ -16,10 +16,12 @@ public interface AbonoDao extends JpaRepository<Abono, Long> {
 
     List<Abono> findByVenta_IdVenta(Long ventaId);
 
-    @Query(value = "SELECT SUM(a.Abono) FROM abono a WHERE a.abono > 0.00 AND DATE(a.Fecha_Abono) = CURRENT_DATE", nativeQuery = true)
+    @Query(value = "SELECT SUM(a.abono) FROM abono a WHERE a.abono > 0.00 AND a.fecha_abono = CURRENT_DATE", nativeQuery = true)
     BigDecimal sumAbonosDelDiaReal();
 
-    @Query(value = "SELECT SUM(a.Abono) as total, DATE(a.Fecha_Abono) as fecha FROM abono a WHERE a.abono > 0.00 AND a.Fecha_Abono BETWEEN DATE_SUB(CURRENT_DATE, INTERVAL 7 DAY) AND CURRENT_DATE GROUP BY DATE(a.Fecha_Abono)", nativeQuery = true)
+    @Query(value = "SELECT SUM(a.abono) AS total, a.fecha_abono AS fecha FROM abono a\n" +
+            "WHERE a.abono > 0.00 AND a.fecha_abono BETWEEN CURRENT_DATE - INTERVAL '7 days' AND CURRENT_DATE\n" +
+            "GROUP BY a.fecha_abono", nativeQuery = true)
     List<Map<String, Object>> findGananciasDeLaSemanaReal();
 
     @Query(value = "SELECT deuda FROM abono WHERE id_venta = :ventaId ORDER BY fecha_abono DESC, id DESC LIMIT 1", nativeQuery = true)
